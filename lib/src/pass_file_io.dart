@@ -134,6 +134,21 @@ class PassFileIO {
   }
 
   // ignore: public_member_api_docs
+  Future<PassFile> fetchFromBuffer({required List<int> bytes}) async {
+    final passId = _generatePassId();
+    final passFile = await _createPass(passId: passId, isPreview: true);
+    final passDir = Directory(path.withoutExtension(passFile.path));
+    final File file = File(passFile.path);
+    await file.writeAsBytes(bytes);
+    await _unpackPass(passPath: passFile.path);
+    return PassParser(
+      passId: passId,
+      unpackedPassDirectory: passDir,
+      passFile: passFile,
+    ).parse();
+  }
+
+  // ignore: public_member_api_docs
   Future<List<PassFile>> getAllSaved() async {
     final parsedPasses = <PassFile>[];
     final passesDir = await _getPassesDir();

@@ -34,6 +34,11 @@ class Pass {
     return PassFileIO().fetchPreviewFromUrl(url: url);
   }
 
+  /// Fetch preview of pass file from [List<int>], parse and return [PassFile]
+  Future<PassFile> fetchFromBuffer({required List<int> bytes}) async {
+    return PassFileIO().fetchFromBuffer(bytes: bytes);
+  }
+
   /// Delete all files and folders for [passFile] from internal memory and return saved passes
   Future<List<PassFile>> delete(PassFile passFile) async {
     PassFileIO().delete(passFile.directory, passFile.file);
